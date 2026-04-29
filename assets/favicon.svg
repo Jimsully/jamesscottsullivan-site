@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>James Scott Sullivan monogram</title>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f0bf62" />
+      <stop offset="52%" stop-color="#d98257" />
+      <stop offset="100%" stop-color="#17483d" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#g)" />
+  <path d="M34 87c9 6 20 9 31 9 16 0 28-5 36-14 6-7 9-15 9-24 0-12-5-22-16-29C86 24 76 21 64 21c-10 0-19 2-27 6v15c7-4 16-6 26-6 9 0 17 2 23 7 5 4 8 10 8 17 0 6-2 11-6 15-6 5-14 8-25 8-5 0-10-1-15-3V58H32v29h2Z" fill="#fff7ea" />
+  <circle cx="95" cy="38" r="8" fill="#fff7ea" opacity=".85" />
+</svg>

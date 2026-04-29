@@ -1,0 +1,11 @@
+Website/
+qa/
+qa-output/
+scripts/
+docs/
+preview.ps1
+*.ps1
+
+# Only deploy output
+!dist-site/
+!dist-site/**
