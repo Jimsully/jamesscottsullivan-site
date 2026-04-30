@@ -21,6 +21,7 @@
     <meta name="twitter:title" content="James Scott Sullivan | Adventure Photography Portfolio" />
     <meta name="twitter:description" content="A home for James Scott Sullivan's adventures, photographs, writing, and the trips that push past comfort." />
     <meta name="twitter:image" content="https://jamesscottsullivan.com/assets/social-preview.jpg" />
+    <meta name="twitter:image:alt" content="Snowy alpine ridgeline photographed by James Scott Sullivan." />
         <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -32,6 +33,37 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://jamesscottsullivan.com/#james-scott-sullivan",
+            "name": "James Scott Sullivan",
+            "url": "https://jamesscottsullivan.com/",
+            "description": "Adventure photographer sharing field notes, prints, and stories from the road, the mountains, and the water.",
+            "sameAs": ["https://www.instagram.com/jsullivan333"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://jamesscottsullivan.com/#website",
+            "url": "https://jamesscottsullivan.com/",
+            "name": "James Scott Sullivan",
+            "description": "Adventure photography, field notes, and prints from James Scott Sullivan.",
+            "publisher": {
+              "@id": "https://jamesscottsullivan.com/#james-scott-sullivan"
+            },
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://jamesscottsullivan.com/assets/social-preview.jpg",
+              "contentUrl": "https://jamesscottsullivan.com/assets/social-preview.jpg",
+              "caption": "James Scott Sullivan adventure photography and field notes preview image."
+            }
+          }
+        ]
+      }
+    </script>
     <script src="assets/site.js" type="module" defer></script>
   </head>
   <body data-page="home">
@@ -256,8 +288,7 @@
     <footer class="site-footer">
       <div class="container site-footer__inner">
         <div class="site-footer__identity">
-          <p class="eyebrow">Footer</p>
-          <h2>I love life.</h2>
+            <h2>I love life.</h2>
           <p class="section__intro">
             Out in the world with a camera, trying to bring the feeling back.
           </p>
