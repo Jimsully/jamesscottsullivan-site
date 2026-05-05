@@ -1470,13 +1470,23 @@ video {
 
 .story-route-stats__grid {
   display: grid;
-  gap: 0.8rem 1.5rem;
-  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: 0;
   margin: 0;
-  padding: 0.6rem 0;
+  padding: 0.4rem 0;
   border-top: 1px solid rgba(39, 46, 60, 0.08);
   border-bottom: 1px solid rgba(39, 46, 60, 0.08);
+}
+
+.story-route-stats__row {
+  display: grid;
+  grid-template-columns: clamp(8.5rem, 22vw, 10.5rem) minmax(0, 1fr);
+  gap: 0.72rem 1.5rem;
   align-items: baseline;
+  padding: 0.52rem 0;
+}
+
+.story-route-stats__row + .story-route-stats__row {
+  border-top: 1px solid rgba(39, 46, 60, 0.05);
 }
 
 .story-route-stats__intro {
@@ -1486,7 +1496,6 @@ video {
 .story-route-stats__grid dt,
 .story-route-stats__grid dd {
   margin: 0;
-  padding: 0.1rem 0;
 }
 
 .story-route-stats__grid dt {
@@ -1500,9 +1509,8 @@ video {
   color: var(--ink);
   font-size: clamp(1rem, 1.25vw, 1.08rem);
   font-weight: 700;
-  justify-self: end;
-  text-align: right;
-  max-width: 26ch;
+  text-align: left;
+  max-width: 28ch;
 }
 
 .story-route-stats__link {
@@ -2672,9 +2680,14 @@ body[data-debug-album-anchors="true"] .album-day {
     max-height: 62vh;
   }
 
-  .story-route-stats__grid {
-    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
-    gap: 0.72rem 1rem;
+  .story-route-stats__row {
+    grid-template-columns: minmax(7.75rem, 8.75rem) minmax(0, 1fr);
+    gap: 0.6rem 0.95rem;
+    align-items: start;
+  }
+
+  .story-route-stats__grid dd {
+    max-width: none;
   }
 
   .album-flow__row--pair,
