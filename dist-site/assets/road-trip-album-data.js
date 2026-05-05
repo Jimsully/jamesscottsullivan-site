@@ -159,13 +159,40 @@ const roadTripDateGroupDefinitions = [
     prefixes: ["20240504"],
   },
   {
-    id: "chapter-3-yellowstone-arrival",
+    id: "chapter-3-east-entrance-window",
     chapterId: "chapter-3",
     dateLabel: "May 5, 2024",
-    title: "Buffalo Bill to Yellowstone",
+    title: "Buffalo Bill to the east entrance",
     location: "Cody / Yellowstone east entrance",
-    note: "Museum day, lucky timing, half-open roads, and the last campsite turning up exactly when it needed to.",
-    prefixes: ["20240505"],
+    note: "Museum day, lucky timing, half-open roads, and that first feeling that Yellowstone had opened at exactly the right moment.",
+    baseNames: ["20240505_070716", "20240505_071429"],
+  },
+  {
+    id: "chapter-3-yellowstone-solo",
+    chapterId: "chapter-3",
+    dateLabel: "May 5, 2024",
+    title: "Yellowstone solo orbit",
+    location: "Yellowstone National Park",
+    note: "Wildlife, thermal stops, old-timer beta, and the slower solo wandering rhythm that made the park feel huge.",
+    baseNames: [
+      "20240505_100614",
+      "20240505_101717",
+      "20240505_114913",
+      "20240505_115304",
+      "20240505_115555",
+      "20240505_115721",
+      "20240505_115732",
+      "20240505_115947",
+    ],
+  },
+  {
+    id: "chapter-3-yellowstone-camp",
+    chapterId: "chapter-3",
+    dateLabel: "May 5, 2024",
+    title: "Late light and the last campsite",
+    location: "Yellowstone / open campground",
+    note: "The day slows down here: more wandering, camp luck, and that first cold Yellowstone night settling in.",
+    baseNames: ["20240505_141037", "20240505_152354", "20240505_172529"],
   },
   {
     id: "chapter-3-yellowstone-big-sky",
@@ -479,7 +506,13 @@ function buildRoadTripAltText(group, imageIndex) {
 
 function buildRoadTripImages(group) {
   return roadTripAlbumImageManifest
-    .filter((image) => group.prefixes.some((prefix) => image.baseName.startsWith(prefix)))
+    .filter((image) => {
+      if (group.baseNames?.length) {
+        return group.baseNames.includes(image.baseName);
+      }
+
+      return group.prefixes.some((prefix) => image.baseName.startsWith(prefix));
+    })
     .sort(compareByBaseName)
     .map((image, imageIndex) => ({
       ...image,

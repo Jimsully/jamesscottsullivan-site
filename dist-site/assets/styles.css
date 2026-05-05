@@ -1553,25 +1553,20 @@ video {
   width: min(100%, 430px);
 }
 
+.story-video--wide {
+  width: min(100%, 620px);
+}
+
 .story-video {
   margin-inline: auto;
 }
 
 .story-video video,
 .album-video video {
-  border-radius: 14px;
-  box-shadow: var(--shadow-soft);
-}
-
-.story-video-section .story-video--full {
-  width: 100%;
-  max-width: none;
-  margin-top: 0.9rem;
-}
-
-.story-video-section .story-video--full video {
   display: block;
   width: 100%;
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
 }
 
 .story-nav-card {
