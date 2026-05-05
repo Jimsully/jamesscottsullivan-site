@@ -1470,45 +1470,39 @@ video {
 
 .story-route-stats__grid {
   display: grid;
-  gap: 0 1.75rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.5rem;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   margin: 0;
-  padding: 0.25rem 0;
+  padding: 0.6rem 0;
   border-top: 1px solid rgba(39, 46, 60, 0.08);
   border-bottom: 1px solid rgba(39, 46, 60, 0.08);
+  align-items: baseline;
 }
 
 .story-route-stats__intro {
   color: var(--ink-soft) !important;
 }
 
-.story-route-stats__grid div {
-  display: grid;
-  gap: 0.28rem;
-  padding: 0.9rem 0;
-  line-height: 1.5;
-}
-
-.story-route-stats__grid div:nth-last-child(n + 3) {
-  border-bottom: 1px solid rgba(39, 46, 60, 0.08);
-}
-
 .story-route-stats__grid dt,
 .story-route-stats__grid dd {
   margin: 0;
+  padding: 0.1rem 0;
 }
 
 .story-route-stats__grid dt {
-  color: var(--forest-soft);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .story-route-stats__grid dd {
   color: var(--ink);
   font-size: clamp(1rem, 1.25vw, 1.08rem);
+  font-weight: 700;
+  justify-self: end;
+  text-align: right;
+  max-width: 26ch;
 }
 
 .story-route-stats__link {
@@ -2679,15 +2673,8 @@ body[data-debug-album-anchors="true"] .album-day {
   }
 
   .story-route-stats__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .story-route-stats__grid div:nth-last-child(n + 3) {
-    border-bottom: 0;
-  }
-
-  .story-route-stats__grid div:not(:last-child) {
-    border-bottom: 1px solid rgba(39, 46, 60, 0.08);
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+    gap: 0.72rem 1rem;
   }
 
   .album-flow__row--pair,
