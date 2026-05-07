@@ -325,6 +325,7 @@ function renderPrintGrid() {
   const printLayoutClasses = {
     "ilya-peak": "print-card--lead",
     "streets-of-istanbul-print": "print-card--support-tall",
+    "fools-spring": "print-card--support-left",
     "key-west-sunrise-print": "print-card--support-wide",
     "fresh-pond-circle-print": "print-card--quiet",
   };
