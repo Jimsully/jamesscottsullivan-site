@@ -1,5 +1,6 @@
 import {
   fieldNotePreviews,
+  postAlbumCollections,
   portfolioGridItems,
   portfolioItems,
   printItems,
@@ -22,6 +23,15 @@ const portfolioLightboxCaption = document.querySelector("[data-portfolio-lightbo
 const portfolioLightboxClose = document.querySelector("[data-portfolio-lightbox-close]");
 const portfolioLightboxPrev = document.querySelector("[data-portfolio-lightbox-prev]");
 const portfolioLightboxNext = document.querySelector("[data-portfolio-lightbox-next]");
+const chapterAlbumModal = document.querySelector("[data-chapter-album-modal]");
+const chapterAlbumStage = document.querySelector("[data-chapter-album-stage]");
+const chapterAlbumMeta = document.querySelector("[data-chapter-album-meta]");
+const chapterAlbumTitle = document.querySelector("[data-chapter-album-title]");
+const chapterAlbumCaption = document.querySelector("[data-chapter-album-caption]");
+const chapterAlbumCount = document.querySelector("[data-chapter-album-count]");
+const chapterAlbumClose = document.querySelector("[data-chapter-album-close]");
+const chapterAlbumPrev = document.querySelector("[data-chapter-album-prev]");
+const chapterAlbumNext = document.querySelector("[data-chapter-album-next]");
 const printStoryModal = document.querySelector("[data-print-story-modal]");
 const printStoryImage = document.querySelector("[data-print-story-image]");
 const printStoryMeta = document.querySelector("[data-print-story-meta]");
@@ -36,6 +46,9 @@ const emailAddress = "James.Scott.Sullivan@gmail.com";
 let albumAnchorHighlightTimer = null;
 let activePortfolioLightboxIndex = null;
 let lastPortfolioLightboxTrigger = null;
+let activeChapterAlbumMedia = [];
+let activeChapterAlbumIndex = null;
+let lastChapterAlbumTrigger = null;
 let activePrintStoryIndex = null;
 let lastPrintStoryTrigger = null;
 const roadTripAnchorRetryDelays = [120, 320, 700, 1400, 2400, 4200, 7000];
@@ -314,6 +327,236 @@ function initializePortfolioLightbox() {
   });
 
   document.addEventListener("keydown", handlePortfolioLightboxKeydown);
+}
+
+function getChapterAlbumMedia(chapterId) {
+  if (postAlbumCollections[chapterId]?.media?.length) {
+    return postAlbumCollections[chapterId].media;
+  }
+
+  const section = roadTripAlbumSections.find((item) => item.id === chapterId);
+  if (!section) {
+    return [];
+  }
+
+  return section.groups.flatMap((group) => {
+    const meta = [section.label, group.location, group.dateLabel].filter(Boolean).join(" / ");
+    const videos = (group.videos ?? []).map((video) => ({
+      type: "video",
+      src: video.video,
+      poster: video.poster,
+      alt: video.ariaLabel,
+      title: group.title,
+      caption: group.note,
+      meta,
+    }));
+    const images = (group.images ?? []).map((image) => ({
+      type: "image",
+      src: image.image,
+      alt: image.alt,
+      title: group.title,
+      caption: group.note,
+      meta,
+    }));
+
+    return [...videos, ...images];
+  });
+}
+
+function getChapterAlbumFocusableElements() {
+  if (!chapterAlbumModal || chapterAlbumModal.hidden) {
+    return [];
+  }
+
+  return Array.from(
+    chapterAlbumModal.querySelectorAll('button:not([disabled]), video[controls], [href], [tabindex]:not([tabindex="-1"])')
+  ).filter((element) => !element.hasAttribute("hidden"));
+}
+
+function pauseChapterAlbumMedia() {
+  chapterAlbumStage?.querySelectorAll("video").forEach((video) => {
+    video.pause();
+  });
+}
+
+function updateChapterAlbumModal(index) {
+  const item = activeChapterAlbumMedia[index];
+  if (
+    !item ||
+    !chapterAlbumStage ||
+    !chapterAlbumMeta ||
+    !chapterAlbumTitle ||
+    !chapterAlbumCaption ||
+    !chapterAlbumCount ||
+    !chapterAlbumPrev ||
+    !chapterAlbumNext
+  ) {
+    return false;
+  }
+
+  pauseChapterAlbumMedia();
+  activeChapterAlbumIndex = index;
+  chapterAlbumMeta.textContent = item.meta ?? "";
+  chapterAlbumTitle.textContent = item.title ?? "Road Trip album";
+  chapterAlbumCaption.textContent = item.caption ?? "";
+  chapterAlbumCaption.hidden = !item.caption;
+  chapterAlbumCount.textContent = `${index + 1} / ${activeChapterAlbumMedia.length}`;
+  chapterAlbumPrev.disabled = index === 0;
+  chapterAlbumNext.disabled = index === activeChapterAlbumMedia.length - 1;
+
+  if (item.type === "video") {
+    chapterAlbumStage.innerHTML = `
+      <video controls preload="metadata" playsinline poster="${escapeHtml(item.poster)}" aria-label="${escapeHtml(item.alt)}">
+        <source src="${escapeHtml(item.src)}" type="video/mp4" />
+      </video>
+    `;
+  } else {
+    chapterAlbumStage.innerHTML = `
+      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt)}" loading="eager" decoding="async" />
+    `;
+  }
+
+  return true;
+}
+
+function stepChapterAlbumModal(direction) {
+  if (activeChapterAlbumIndex === null) {
+    return;
+  }
+
+  const nextIndex = activeChapterAlbumIndex + direction;
+  if (nextIndex < 0 || nextIndex >= activeChapterAlbumMedia.length) {
+    return;
+  }
+
+  updateChapterAlbumModal(nextIndex);
+}
+
+function closeChapterAlbumModal({ restoreFocus = true } = {}) {
+  if (!chapterAlbumModal || chapterAlbumModal.hidden) {
+    return;
+  }
+
+  pauseChapterAlbumMedia();
+  chapterAlbumModal.hidden = true;
+  body.classList.remove("chapter-album-open");
+  activeChapterAlbumMedia = [];
+  activeChapterAlbumIndex = null;
+  if (chapterAlbumStage) {
+    chapterAlbumStage.innerHTML = "";
+  }
+
+  if (restoreFocus && lastChapterAlbumTrigger instanceof HTMLElement) {
+    lastChapterAlbumTrigger.focus();
+  }
+}
+
+function openChapterAlbumModal(chapterId, trigger = null) {
+  if (!chapterAlbumModal) {
+    return false;
+  }
+
+  const media = getChapterAlbumMedia(chapterId);
+  if (media.length === 0) {
+    return false;
+  }
+
+  activeChapterAlbumMedia = media;
+  lastChapterAlbumTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement;
+  if (!updateChapterAlbumModal(0)) {
+    return false;
+  }
+
+  chapterAlbumModal.hidden = false;
+  body.classList.add("chapter-album-open");
+
+  window.requestAnimationFrame(() => {
+    chapterAlbumClose?.focus();
+  });
+
+  return true;
+}
+
+function handleChapterAlbumKeydown(event) {
+  if (!chapterAlbumModal || chapterAlbumModal.hidden) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeChapterAlbumModal();
+    return;
+  }
+
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    stepChapterAlbumModal(-1);
+    return;
+  }
+
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    stepChapterAlbumModal(1);
+    return;
+  }
+
+  if (event.key !== "Tab") {
+    return;
+  }
+
+  const focusableElements = getChapterAlbumFocusableElements();
+  if (focusableElements.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && document.activeElement === firstElement) {
+    event.preventDefault();
+    lastElement.focus();
+    return;
+  }
+
+  if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault();
+    firstElement.focus();
+  }
+}
+
+function initializeChapterAlbumModal() {
+  const triggers = Array.from(document.querySelectorAll("[data-chapter-album-open], [data-post-album-open]"));
+  if (triggers.length === 0 || !chapterAlbumModal || !chapterAlbumClose || !chapterAlbumPrev || !chapterAlbumNext) {
+    return;
+  }
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", (event) => {
+      const chapterId = trigger.dataset.chapterAlbumOpen ?? trigger.dataset.postAlbumOpen ?? "";
+      if (openChapterAlbumModal(chapterId, trigger)) {
+        event.preventDefault();
+      }
+    });
+  });
+
+  chapterAlbumModal.addEventListener("click", (event) => {
+    if (event.target === chapterAlbumModal || event.target.closest("[data-chapter-album-close]")) {
+      closeChapterAlbumModal();
+      return;
+    }
+
+    if (event.target.closest("[data-chapter-album-prev]")) {
+      stepChapterAlbumModal(-1);
+      return;
+    }
+
+    if (event.target.closest("[data-chapter-album-next]")) {
+      stepChapterAlbumModal(1);
+    }
+  });
+
+  document.addEventListener("keydown", handleChapterAlbumKeydown);
 }
 
 function renderPrintGrid() {
@@ -1366,6 +1609,7 @@ if (navToggle && siteNav) {
 
 initializeFilters();
 initializePortfolioLightbox();
+initializeChapterAlbumModal();
 initializePrintStoryModal();
 initializeRevealObserver();
 initializeRoadTripAlbumNavigation();

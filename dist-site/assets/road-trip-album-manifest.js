@@ -1,6 +1,5 @@
 export const roadTripAlbumImageManifest = [
   { baseName: "20240402_160204", image: "assets/media/blog/road-trip/album/20240402_160204-1200.jpg" },
-  { baseName: "20240402_160204-2", image: "assets/media/blog/road-trip/album/20240402_160204-2-1200.jpg" },
   { baseName: "20240427_070807", image: "assets/media/blog/road-trip/album/20240427_070807-1200.jpg" },
   { baseName: "20240427_113406", image: "assets/media/blog/road-trip/album/20240427_113406-1200.jpg" },
   { baseName: "20240427_113456", image: "assets/media/blog/road-trip/album/20240427_113456-1200.jpg" },
@@ -10,7 +9,6 @@ export const roadTripAlbumImageManifest = [
   { baseName: "20240427_214215", image: "assets/media/blog/road-trip/album/20240427_214215-1200.jpg" },
   { baseName: "20240427_214220", image: "assets/media/blog/road-trip/album/20240427_214220-1200.jpg" },
   { baseName: "20240428_185430", image: "assets/media/blog/road-trip/album/20240428_185430-1200.jpg" },
-  { baseName: "20240428_185430-2", image: "assets/media/blog/road-trip/album/20240428_185430-2-1200.jpg" },
   { baseName: "20240429_084459", image: "assets/media/blog/road-trip/album/20240429_084459-1200.jpg" },
   { baseName: "20240429_094142", image: "assets/media/blog/road-trip/album/20240429_094142-1200.jpg" },
   { baseName: "20240429_133125", image: "assets/media/blog/road-trip/album/20240429_133125-1200.jpg" },

@@ -124,8 +124,8 @@
 
       <section class="section">
         <div class="container story-shell">
-          <a class="story-album-cta" href="road-trip-album.html#chapter-2" data-reveal>
-            <span class="story-album-cta__eyebrow">See the rest</span>
+          <a class="story-album-cta" href="road-trip-album.html#chapter-2" data-chapter-album-open="chapter-2" data-reveal>
+            <span class="story-album-cta__eyebrow">View this chapter's album</span>
             <strong>More photos from the stretch that took me to the Bighorns.</strong>
             <span>Pictured Rocks, Devil's Lake, Badlands, Wind Cave, the whole run.</span>
           </a>
@@ -285,10 +285,10 @@
               <strong>Back to the chapters</strong>
               <span>Jump back or skip ahead.</span>
             </a>
-            <a class="story-nav-card" href="road-trip-album.html#chapter-2" data-reveal data-delay="2">
+            <a class="story-nav-card" href="road-trip-album.html#chapter-2" data-chapter-album-open="chapter-2" data-reveal data-delay="2">
               <small>See the rest</small>
-              <strong>See the Chapter 2 album</strong>
-              <span>The rest of this stretch is over there.</span>
+              <strong>View this chapter's album</strong>
+              <span>The rest of this stretch, right here.</span>
             </a>
             <a class="story-nav-card" href="blog.html#road-trip-queue" data-reveal data-delay="3">
               <small>Next Chapter</small>
@@ -299,6 +299,25 @@
         </div>
       </section>
     </main>
+
+    <div class="chapter-album-modal" data-chapter-album-modal hidden role="dialog" aria-modal="true" aria-labelledby="chapter-album-title" aria-describedby="chapter-album-caption">
+      <div class="chapter-album-modal__dialog">
+        <div class="chapter-album-modal__controls">
+          <span class="chapter-album-modal__count" data-chapter-album-count></span>
+          <div class="chapter-album-modal__nav">
+            <button class="chapter-album-modal__button" type="button" data-chapter-album-prev>Previous</button>
+            <button class="chapter-album-modal__button" type="button" data-chapter-album-next>Next</button>
+            <button class="chapter-album-modal__button chapter-album-modal__button--close" type="button" data-chapter-album-close>Close</button>
+          </div>
+        </div>
+        <figure class="chapter-album-modal__stage" data-chapter-album-stage></figure>
+        <div class="chapter-album-modal__details">
+          <p class="chapter-album-modal__meta" data-chapter-album-meta></p>
+          <h2 class="chapter-album-modal__title" id="chapter-album-title" data-chapter-album-title></h2>
+          <p class="chapter-album-modal__caption" id="chapter-album-caption" data-chapter-album-caption></p>
+        </div>
+      </div>
+    </div>
 
     <footer class="site-footer">
       <div class="container site-footer__inner">

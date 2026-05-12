@@ -47,6 +47,7 @@ body {
 }
 
 body.portfolio-lightbox-open,
+body.chapter-album-open,
 body.print-story-open {
   overflow: hidden;
 }
@@ -1429,6 +1430,12 @@ video {
   border-color: rgba(23, 72, 61, 0.18);
 }
 
+.story-album-cta--button {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+}
+
 .story-album-cta strong {
   font-size: 1.05rem;
 }
@@ -1444,6 +1451,136 @@ video {
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.chapter-album-modal[hidden] {
+  display: none;
+}
+
+.chapter-album-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 270;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(6, 10, 16, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.chapter-album-modal__dialog {
+  width: min(100%, 1180px);
+  max-height: calc(100vh - 2rem);
+  display: grid;
+  gap: 0.9rem;
+  color: var(--ink-invert);
+}
+
+.chapter-album-modal__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.chapter-album-modal__count {
+  color: rgba(255, 247, 234, 0.7);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.chapter-album-modal__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.chapter-album-modal__button {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 247, 234, 0.16);
+  border-radius: 999px;
+  background: rgba(18, 24, 34, 0.72);
+  color: var(--ink-invert);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    opacity var(--transition);
+}
+
+.chapter-album-modal__button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(24, 31, 43, 0.92);
+  border-color: rgba(255, 247, 234, 0.26);
+}
+
+.chapter-album-modal__button:focus-visible {
+  outline: 2px solid rgba(255, 247, 234, 0.8);
+  outline-offset: 2px;
+}
+
+.chapter-album-modal__button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.chapter-album-modal__stage {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  min-height: min(72vh, 720px);
+  padding: 0.65rem;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 247, 234, 0.12);
+  background: rgba(10, 15, 24, 0.74);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+.chapter-album-modal__stage img,
+.chapter-album-modal__stage video {
+  display: block;
+  max-width: 100%;
+  max-height: min(72vh, 780px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.chapter-album-modal__details {
+  display: grid;
+  gap: 0.42rem;
+  width: min(100%, 760px);
+}
+
+.chapter-album-modal__meta,
+.chapter-album-modal__caption {
+  margin: 0;
+}
+
+.chapter-album-modal__meta {
+  color: rgba(255, 247, 234, 0.66);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.chapter-album-modal__title {
+  color: var(--ink-invert);
+  font-size: clamp(1.7rem, 2.7vw, 2.5rem);
+  line-height: 1.04;
+}
+
+.chapter-album-modal__caption {
+  color: rgba(255, 247, 234, 0.84);
+  line-height: 1.7;
+  max-width: 60ch;
 }
 
 .story-article {
@@ -2697,6 +2834,35 @@ body[data-debug-album-anchors="true"] .album-day {
   }
 
   .portfolio-lightbox__figure img {
+    max-height: 62vh;
+  }
+
+  .chapter-album-modal {
+    padding: 0.75rem;
+  }
+
+  .chapter-album-modal__controls {
+    flex-wrap: wrap;
+  }
+
+  .chapter-album-modal__nav {
+    width: 100%;
+  }
+
+  .chapter-album-modal__button {
+    flex: 1 1 0;
+  }
+
+  .chapter-album-modal__button--close {
+    width: 100%;
+  }
+
+  .chapter-album-modal__stage {
+    min-height: auto;
+  }
+
+  .chapter-album-modal__stage img,
+  .chapter-album-modal__stage video {
     max-height: 62vh;
   }
 
