@@ -182,6 +182,144 @@ export const siteDirection = {
   ],
 };
 
+export const publishedStoryPosts = [
+  {
+    id: "road-trip-chapter-1",
+    href: "blog-road-trip-chapter-1.html",
+    label: "Road Trip / Chapter 1",
+    category: "Field note",
+    eventDate: "2024-04-26",
+    title: "Wind at My Back",
+    summary:
+      "Layoff, packed Subaru, Niagara, and the first push west while the whole idea was still trying to become real.",
+    image: "assets/media/blog/road-trip/wind-at-my-back-hero-2200.jpg",
+    tileImage: "assets/media/blog/road-trip/wind-at-my-back-card-1000.jpg",
+    alt: "A packed Subaru with a mountain bike mounted on the back at the start of the road trip.",
+  },
+  {
+    id: "road-trip-chapter-2",
+    href: "blog-road-trip-chapter-2.html",
+    label: "Road Trip / Chapter 2",
+    category: "Field note",
+    eventDate: "2024-05-02",
+    title: "Road Trip Sampler: The proving grounds",
+    summary:
+      "The first week turns into a testing ground: Walmart mornings, Devil's Lake momentum, the Badlands, and the first properly wild day at Wind Cave.",
+    image: "assets/media/blog/road-trip/proving-grounds-hero-2200.jpg",
+    tileImage: "assets/media/blog/road-trip/proving-grounds-card-1000.jpg",
+    alt: "Layered rock formations in Badlands National Park.",
+  },
+  {
+    id: "road-trip-chapter-3",
+    href: "blog-road-trip-chapter-3.html",
+    label: "Road Trip / Chapter 3",
+    category: "Field note",
+    eventDate: "2024-05-08",
+    title: "West: Cowboy Country",
+    summary:
+      "Cody, Yellowstone, Big Sky, Bozeman, and the Gallatin. The chapter where the West stops feeling hypothetical and starts pulling the whole trip north.",
+    image: "assets/media/blog/road-trip/cowboy-country-hero-2200.jpg",
+    tileImage: "assets/media/blog/road-trip/cowboy-country-card-1000.jpg",
+    alt: "Cold blue water and snowy mountains during the Montana stretch of the road trip.",
+  },
+  {
+    id: "road-trip-chapter-4",
+    href: "blog-road-trip-chapter-4.html",
+    label: "Road Trip / Chapter 4",
+    category: "Flagship chapter",
+    eventDate: "2024-05-12",
+    title: "The World Is Big",
+    summary:
+      "Glacier, northern lights, giant rivers, ancient cedars, ferries, and the wet long run west that made the whole country feel like it was changing shape in real time.",
+    image: "assets/media/blog/road-trip/chapter-4/world-is-big-hero-2200.jpg",
+    tileImage: "assets/media/blog/road-trip/chapter-4/world-is-big-hero-2200.jpg",
+    alt: "Glacier lake and snow-covered peaks during the Chapter 4 westward stretch.",
+  },
+  {
+    id: "presidential-traverse",
+    href: "blog-presidential-traverse.html",
+    label: "Presidential Traverse / White Mountains",
+    category: "Mountain day",
+    eventDate: "2024-07-19",
+    title: "A Presidential Traverse",
+    summary:
+      "Valley Way up north, Mount Washington chaos in the middle, and the long southern ridge all the way out.",
+    image: "assets/media/blog/presidential-traverse/presidential-traverse-hero-2200.jpg",
+    tileImage: "assets/media/blog/presidential-traverse/presidential-traverse-card-1000.jpg",
+    alt: "Trail leading toward Mount Washington on the Presidential Traverse in New Hampshire.",
+  },
+  {
+    id: "north-kinsman",
+    href: "blog-nh48-north-kinsman.html",
+    label: "NH48 / 32 of 48",
+    category: "Hike note",
+    eventDate: "2026-05-02",
+    title: "North Kinsman via Fishin Jimmy",
+    summary:
+      "A fool's spring up high, Fishin Jimmy in mixed conditions, and one of those days where turning around ends up being the right call.",
+    image: "assets/media/blog/nh48/north-kinsman/north-kinsman-hero-2200.jpg",
+    tileImage: "assets/media/blog/nh48/north-kinsman/north-kinsman-lonesome-lake-1600.jpg",
+    alt: "Snow dusting a slabby trail on the way toward North Kinsman in New Hampshire.",
+  },
+].sort((left, right) => new Date(left.eventDate).getTime() - new Date(right.eventDate).getTime());
+
+export const homepageGalleryFrames = [
+  {
+    id: "world-is-big-home",
+    href: "blog-road-trip-chapter-4.html",
+    label: "Road Trip / Chapter 4",
+    title: "The World Is Big",
+    summary: "Glacier, cedars, ferries, and the stretch where the whole country stopped feeling segmented.",
+    image: "assets/media/blog/road-trip/chapter-4/world-is-big-hero-2200.jpg",
+    alt: "Glacier lake and snow-covered peaks during the Chapter 4 westward stretch.",
+  },
+  {
+    id: "fools-spring-home",
+    href: "prints.html",
+    label: "Print / White Mountains",
+    title: "Fools Spring",
+    summary: "Lonesome Lake settling into snow on the way to Kinsman Ridge.",
+    image: printPath("fools-spring", "modal", 2200),
+    alt: "Watermarked preview of Lonesome Lake during a calm spring snowfall on the way up to Kinsman Ridge in New Hampshire.",
+  },
+  {
+    id: "presi-home",
+    href: "blog-presidential-traverse.html",
+    label: "Field Note / White Mountains",
+    title: "Presidential Traverse",
+    summary: "Long ridge, summit chaos, hot dog stop, keep moving.",
+    image: "assets/media/blog/presidential-traverse/presidential-traverse-range-1600.jpg",
+    alt: "Mountain range view from the Presidential Traverse in New Hampshire.",
+  },
+  {
+    id: "ilya-peak-home",
+    href: "prints.html",
+    label: "Print / Kyrgyzstan",
+    title: "Ilya Peak",
+    summary: "A frame big enough to keep pulling back toward the wall.",
+    image: printPath("ilya-peak", "modal", 2200),
+    alt: "Watermarked preview of Ilya Peak in Kyrgyzstan, seen across a valley from the top of a ski line.",
+  },
+  {
+    id: "north-kinsman-home",
+    href: "blog-nh48-north-kinsman.html",
+    label: "NH48 / White Mountains",
+    title: "North Kinsman",
+    summary: "Quiet snowfall, Fishin Jimmy, and a mountain saying no in a useful way.",
+    image: "assets/media/blog/nh48/north-kinsman/north-kinsman-lonesome-lake-framed-1600.jpg",
+    alt: "Lonesome Lake framed by snowy trees and low clouds in the White Mountains.",
+  },
+  {
+    id: "istanbul-home",
+    href: "portfolio.html",
+    label: "Portfolio / Istanbul",
+    title: "Streets of Istanbul",
+    summary: "Movement, compression, and a city stacking itself together.",
+    image: portfolioPath("adventure", "streetsofistanbul"),
+    alt: "Shops and people on a street in Istanbul with the Sea of Marmara in the background.",
+  },
+];
+
 export const portfolioItems = [
   {
     id: "ilya-peak",

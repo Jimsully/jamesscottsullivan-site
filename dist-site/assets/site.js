@@ -1,9 +1,11 @@
 import {
   fieldNotePreviews,
+  homepageGalleryFrames,
   postAlbumCollections,
   portfolioGridItems,
   portfolioItems,
   printItems,
+  publishedStoryPosts,
   roadTripAlbumChapterLinks,
   roadTripAlbumSections,
   roadTripAlbumStats,
@@ -77,6 +79,10 @@ const storyActivityElevationFormatter = new Intl.NumberFormat("en-US", {
 });
 const storyActivityMetersPerMile = 1609.344;
 const storyActivityFeetPerMeter = 3.28084;
+const showcaseCarouselCollections = {
+  "homepage-gallery": homepageGalleryFrames,
+  "published-stories": publishedStoryPosts,
+};
 
 function composeMailto(subject, lines) {
   const bodyText = lines.filter(Boolean).join("\n");
@@ -823,6 +829,294 @@ function renderFieldNotePreviews() {
           <p class="story-card__meta">${item.label}</p>
           <h3>${item.title}</h3>
           <p>${item.summary}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function buildShowcaseCarouselSlideMarkup(item, index, total, activeIndex, variant) {
+  const imagePath = item.image ?? item.tileImage ?? "";
+  const title = escapeHtml(item.title ?? "Untitled");
+  const label = escapeHtml(item.label ?? item.category ?? "");
+  const summary = escapeHtml(item.summary ?? "");
+  const href = escapeHtml(item.href ?? "#");
+  const alt = escapeHtml(item.alt ?? item.title ?? "Showcase image");
+  const category = escapeHtml(item.category ?? "");
+  const slideClassNames = [
+    "showcase-carousel__slide",
+    index === activeIndex ? "is-active" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return `
+    <article
+      class="${slideClassNames}"
+      data-showcase-slide="${index}"
+      role="group"
+      aria-roledescription="slide"
+      aria-label="${index + 1} of ${total}"
+      aria-hidden="${index === activeIndex ? "false" : "true"}"
+    >
+      <a class="showcase-carousel__link" href="${href}" aria-label="Open ${title}">
+        <div class="showcase-carousel__media media-shell">
+          <img
+            src="${escapeHtml(imagePath)}"
+            alt="${alt}"
+            loading="${index === activeIndex ? "eager" : "lazy"}"
+            decoding="async"
+          />
+        </div>
+        <div class="showcase-carousel__overlay">
+          ${label ? `<p class="showcase-carousel__label">${label}</p>` : ""}
+          <h3>${title}</h3>
+          ${summary ? `<p class="showcase-carousel__summary">${summary}</p>` : ""}
+          ${
+            variant === "story" && category
+              ? `<div class="showcase-carousel__meta"><span>${category}</span><span>Open the note</span></div>`
+              : ""
+          }
+        </div>
+      </a>
+    </article>
+  `;
+}
+
+function buildShowcaseCarouselRailMarkup(item, index, activeIndex) {
+  const label = escapeHtml(item.label ?? item.title ?? `Slide ${index + 1}`);
+  const buttonClassNames = [
+    "showcase-carousel__jump",
+    index === activeIndex ? "is-active" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return `
+    <button
+      class="${buttonClassNames}"
+      type="button"
+      data-showcase-jump="${index}"
+      aria-label="Show ${label}"
+      aria-pressed="${index === activeIndex ? "true" : "false"}"
+    >
+      ${label}
+    </button>
+  `;
+}
+
+function renderShowcaseCarousel() {
+  const carousels = Array.from(document.querySelectorAll("[data-showcase-carousel]"));
+  if (carousels.length === 0) {
+    return [];
+  }
+
+  return carousels
+    .map((container, carouselIndex) => {
+      const collectionName = container.dataset.showcaseCarousel ?? "";
+      const items = showcaseCarouselCollections[collectionName];
+      if (!Array.isArray(items) || items.length === 0) {
+        return null;
+      }
+
+      const featuredId = container.dataset.showcaseFeatured ?? "";
+      const activeIndex = Math.max(
+        0,
+        items.findIndex((item) => item.id === featuredId)
+      );
+      const variant = container.dataset.showcaseVariant === "gallery" ? "gallery" : "story";
+      const interval = Number.parseInt(container.dataset.showcaseInterval ?? "0", 10);
+      const carouselId = container.id || `showcase-carousel-${carouselIndex + 1}`;
+      const railMarkup =
+        variant === "story"
+          ? `
+            <div class="showcase-carousel__rail" aria-label="Choose a story">
+              ${items.map((item, index) => buildShowcaseCarouselRailMarkup(item, index, activeIndex)).join("")}
+            </div>
+          `
+          : "";
+
+      container.id = carouselId;
+      container.classList.add("showcase-carousel", `showcase-carousel--${variant}`);
+      container.innerHTML = `
+        <div class="showcase-carousel__viewport" data-showcase-viewport>
+          ${items
+            .map((item, index) =>
+              buildShowcaseCarouselSlideMarkup(item, index, items.length, activeIndex, variant)
+            )
+            .join("")}
+        </div>
+        <div class="showcase-carousel__controls">
+          <button
+            class="showcase-carousel__button"
+            type="button"
+            data-showcase-prev
+            aria-controls="${carouselId}"
+            aria-label="Show previous slide"
+          >
+            Previous
+          </button>
+          <p class="showcase-carousel__status" data-showcase-status aria-live="polite"></p>
+          <button
+            class="showcase-carousel__button"
+            type="button"
+            data-showcase-next
+            aria-controls="${carouselId}"
+            aria-label="Show next slide"
+          >
+            Next
+          </button>
+        </div>
+        ${railMarkup}
+      `;
+
+      return {
+        activeIndex,
+        container,
+        featuredId,
+        interval: Number.isFinite(interval) ? interval : 0,
+        items,
+        jumpButtons: Array.from(container.querySelectorAll("[data-showcase-jump]")),
+        nextButton: container.querySelector("[data-showcase-next]"),
+        prevButton: container.querySelector("[data-showcase-prev]"),
+        slides: Array.from(container.querySelectorAll("[data-showcase-slide]")),
+        status: container.querySelector("[data-showcase-status]"),
+        timer: null,
+      };
+    })
+    .filter(Boolean);
+}
+
+function setShowcaseCarouselIndex(controller, nextIndex) {
+  if (!controller || !Array.isArray(controller.items) || controller.items.length === 0) {
+    return;
+  }
+
+  const total = controller.items.length;
+  const normalizedIndex = ((nextIndex % total) + total) % total;
+  controller.activeIndex = normalizedIndex;
+
+  controller.slides.forEach((slide, index) => {
+    const isActive = index === normalizedIndex;
+    slide.classList.toggle("is-active", isActive);
+    slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+  });
+
+  controller.jumpButtons.forEach((button, index) => {
+    const isActive = index === normalizedIndex;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+
+  if (controller.status) {
+    const activeItem = controller.items[normalizedIndex];
+    controller.status.textContent = `${normalizedIndex + 1} / ${total} — ${activeItem.title}`;
+  }
+}
+
+function stopShowcaseCarousel(controller) {
+  if (controller?.timer) {
+    window.clearInterval(controller.timer);
+    controller.timer = null;
+  }
+}
+
+function startShowcaseCarousel(controller) {
+  if (!controller || controller.interval < 800) {
+    return;
+  }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  stopShowcaseCarousel(controller);
+  controller.timer = window.setInterval(() => {
+    setShowcaseCarouselIndex(controller, controller.activeIndex + 1);
+  }, controller.interval);
+}
+
+function initializeShowcaseCarousels() {
+  const controllers = renderShowcaseCarousel();
+  if (controllers.length === 0) {
+    return;
+  }
+
+  controllers.forEach((controller) => {
+    setShowcaseCarouselIndex(controller, controller.activeIndex);
+
+    controller.prevButton?.addEventListener("click", () => {
+      setShowcaseCarouselIndex(controller, controller.activeIndex - 1);
+    });
+
+    controller.nextButton?.addEventListener("click", () => {
+      setShowcaseCarouselIndex(controller, controller.activeIndex + 1);
+    });
+
+    controller.jumpButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetIndex = Number.parseInt(button.dataset.showcaseJump ?? "", 10);
+        if (Number.isNaN(targetIndex)) {
+          return;
+        }
+
+        setShowcaseCarouselIndex(controller, targetIndex);
+      });
+    });
+
+    controller.container.addEventListener("mouseenter", () => stopShowcaseCarousel(controller));
+    controller.container.addEventListener("mouseleave", () => startShowcaseCarousel(controller));
+    controller.container.addEventListener("focusin", () => stopShowcaseCarousel(controller));
+    controller.container.addEventListener("focusout", (event) => {
+      const nextFocused = event.relatedTarget;
+      if (nextFocused instanceof Node && controller.container.contains(nextFocused)) {
+        return;
+      }
+
+      startShowcaseCarousel(controller);
+    });
+
+    controller.container.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setShowcaseCarouselIndex(controller, controller.activeIndex - 1);
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setShowcaseCarouselIndex(controller, controller.activeIndex + 1);
+      }
+    });
+
+    startShowcaseCarousel(controller);
+  });
+}
+
+function renderPublishedStoryGrid() {
+  const grid = document.querySelector("[data-published-story-grid]");
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML = publishedStoryPosts
+    .map(
+      (item, index) => `
+        <article class="story-card" data-reveal data-delay="${Math.min(index, 3)}">
+          <a class="story-card__thumb media-shell story-card__thumb--link" href="${escapeHtml(item.href)}">
+            <img
+              src="${escapeHtml(item.tileImage ?? item.image)}"
+              alt="${escapeHtml(item.alt)}"
+              loading="${index < 3 ? "eager" : "lazy"}"
+              decoding="async"
+            />
+          </a>
+          <p class="story-card__meta">${escapeHtml(item.label)}</p>
+          <h3><a class="story-card__title-link" href="${escapeHtml(item.href)}">${escapeHtml(item.title)}</a></h3>
+          <p>${escapeHtml(item.summary)}</p>
+          <div class="story-card__actions">
+            <a class="button-ghost" href="${escapeHtml(item.href)}">Open the note</a>
+          </div>
         </article>
       `
     )
@@ -1585,6 +1879,7 @@ function initializeRevealObserver() {
 renderPortfolioGrid();
 renderPrintGrid();
 renderFieldNotePreviews();
+renderPublishedStoryGrid();
 renderRoadTripAlbum();
 renderStoryActivityCallouts();
 
@@ -1611,6 +1906,7 @@ initializeFilters();
 initializePortfolioLightbox();
 initializeChapterAlbumModal();
 initializePrintStoryModal();
+initializeShowcaseCarousels();
 initializeRevealObserver();
 initializeRoadTripAlbumNavigation();
 
