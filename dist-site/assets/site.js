@@ -864,7 +864,7 @@ function buildShowcaseCarouselSlideMarkup(item, index, total, activeIndex, varia
           <img
             src="${escapeHtml(imagePath)}"
             alt="${alt}"
-            loading="${index === activeIndex ? "eager" : "lazy"}"
+            loading="eager"
             decoding="async"
           />
         </div>
